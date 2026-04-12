@@ -6,7 +6,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: ptin_front
+    name: ptin-front
   minReplicas: 4
   maxReplicas: 10
   metrics:
