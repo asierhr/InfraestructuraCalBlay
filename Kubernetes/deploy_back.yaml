@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ptin-back
+spec:
+  #replicas: 6
+  selector:
+    matchLabels:
+      app: ptin-back-app
+  template:
+    metadata:
+      labels:
+        app: ptin-back-app
+    spec:
+      #imagePullSecrets:
+      # - name: regcred
+      containers:
+      - name: ptin-back-app
+        image: asierhr/catering-back:v2.1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "dev"
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://ptinbd:5432/test
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: POSTGRESQL_USER
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secret
+              key: POSTGRESQL_PASSWORD
+        resources:
+          requests:
+            memory: "600Mi"
+            cpu: "400m"
+          limits:
+            memory: "1Gi"
+            cpu: "700m"
