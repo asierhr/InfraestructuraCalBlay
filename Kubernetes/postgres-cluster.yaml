@@ -1,0 +1,30 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: ptinbd
+spec:
+  instances: 3
+  storage:
+    size: "10Gi"
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "256MB"
+  bootstrap:
+    initdb:
+      database: test
+      owner: ptincatering
+      secret:
+        name: postgresql-secret
+
+  monitoring:
+    enablePodMonitor: true
+
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+    limits:
+      memory: "1Gi"
+      cpu: "1"

@@ -23,17 +23,17 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: "dev"
         - name: SPRING_DATASOURCE_URL
-          value: jdbc:postgresql://ptinbd:5432/test
+          value: jdbc:postgresql://ptinbd-rw:5432/test
         - name: SPRING_DATASOURCE_USERNAME
           valueFrom:
             secretKeyRef:
               name: postgresql-secret
-              key: POSTGRESQL_USER
+              key: username
         - name: SPRING_DATASOURCE_PASSWORD
           valueFrom:
             secretKeyRef:
               name: postgresql-secret
-              key: POSTGRESQL_PASSWORD
+              key: password
         resources:
           requests:
             memory: "600Mi"
