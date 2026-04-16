@@ -1,12 +1,13 @@
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: ptin-front-hpa
+  name: ptin-back-hpa
+  namespace: prod
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: ptin-front
+    name: ptin-back
   minReplicas: 2
   maxReplicas: 4
   metrics:

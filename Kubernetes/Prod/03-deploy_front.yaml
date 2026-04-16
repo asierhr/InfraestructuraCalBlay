@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ptin-front
+  namespace: prod
 spec:
   #replicas: 6
   selector:

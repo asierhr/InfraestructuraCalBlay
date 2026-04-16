@@ -2,6 +2,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
   name: ptinbd
+  namespace: prod
 spec:
   instances: 3
   storage:
@@ -12,7 +13,7 @@ spec:
       shared_buffers: "256MB"
   bootstrap:
     initdb:
-      database: test
+      database: prod
       owner: ptincatering
       secret:
         name: postgresql-secret
@@ -23,8 +24,8 @@ spec:
 
   resources:
     requests:
-      memory: "512Mi"
-      cpu: "500m"
+      memory: "256Mi"
+      cpu: "250m"
     limits:
-      memory: "1Gi"
-      cpu: "1"
+      memory: "512Gi"
+      cpu: "500m"

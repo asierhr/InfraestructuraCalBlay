@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ptin-back
+  namespace: prod
 spec:
   #replicas: 6
   selector:
@@ -16,16 +17,16 @@ spec:
       # - name: regcred
       containers:
       - name: ptin-back-app
-        image: asierhr/catering-back:v2.7
+        image: asierhr/catering-back:v2.10
         ports:
         - containerPort: 8080
         env:
         - name: SPRING_PROFILES_ACTIVE
-          value: "dev"
+          value: "prod"
         - name: SPRING_DATASOURCE_RW_URL
-          value: jdbc:postgresql://ptinbd-rw:5432/test
+          value: jdbc:postgresql://ptinbd-rw:5432/prod
         - name: SPRING_DATASOURCE_RO_URL
-          value: jdbc:postgresql://ptinbd-ro:5432/test
+          value: jdbc:postgresql://ptinbd-ro:5432/prod
         - name: SPRING_DATASOURCE_USERNAME
           valueFrom:
             secretKeyRef:

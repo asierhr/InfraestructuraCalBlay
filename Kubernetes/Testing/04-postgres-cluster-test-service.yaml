@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ptinbd-test-external-rw
+  namespace: testing
+spec:
+  type: NodePort
+  selector:
+    cnpg.io/cluster: ptinbd-test        # <--- Esto es lo que busca los pods
+    cnpg.io/instanceRole: primary
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      nodePort: 30432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ptinbd-test-external-ro
+  namespace: testing
+spec:
+  type: NodePort
+  selector:
+    cnpg.io/cluster: ptinbd-test
+    cnpg.io/instanceRole: replica
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      nodePort: 30433
