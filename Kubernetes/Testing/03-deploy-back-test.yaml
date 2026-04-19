@@ -21,9 +21,9 @@ spec:
         - name: SPRING_PROFILES_ACTIVE
           value: "dev"
         - name: SPRING_DATASOURCE_RW_URL
-          value: jdbc:postgresql://ptinbd-test-external-rw:5432/prod
+          value: jdbc:postgresql://ptinbd-test-external-rw:5432/test
         - name: SPRING_DATASOURCE_RO_URL
-          value: jdbc:postgresql://ptinbd-test-external-ro:5432/prod
+          value: jdbc:postgresql://ptinbd-test-external-ro:5432/test
         - name: SPRING_DATASOURCE_USERNAME
           valueFrom:
             secretKeyRef:
