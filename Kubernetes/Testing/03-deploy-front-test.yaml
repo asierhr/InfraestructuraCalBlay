@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ptin-front
+  namespace: testing
+spec:
+  selector:
+    matchLabels:
+      app: ptin-front-app
+  template:
+    metadata:
+      labels:
+        app: ptin-front-app
+    spec:
+      containers:
+      - name: ptin-front-app
+        image: asierhr/catering-frontend-dev:v4
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "250Mi"
+            cpu: "250m"
+          limits:
+            memory: "500Mi"
+            cpu: "500m"
