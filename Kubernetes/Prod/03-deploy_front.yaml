@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ptin-front
+  namespace: prod
+spec:
+  #replicas: 6
+  selector:
+    matchLabels:
+      app: ptin-front-app
+  template:
+    metadata:
+      labels:
+        app: ptin-front-app
+    spec:
+      #imagePullSecrets:
+      #- name: regcred
+      containers:
+      - name: ptin-front-app
+        image: asierhr/catering-frontend:v4
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "500Mi"
+            cpu: "400m"
+          limits:
+            memory: "1Gi"
+            cpu: "700m"
