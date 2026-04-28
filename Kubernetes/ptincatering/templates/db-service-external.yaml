@@ -1,0 +1,34 @@
+{{- if .Values.db.externalAccess.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.db.clusterName }}-external-rw
+  namespace: {{ .Values.namespace.name }}
+spec:
+  type: NodePort
+  selector:
+    cnpg.io/cluster: {{ .Values.db.clusterName }}
+    cnpg.io/instanceRole: primary
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      nodePort: {{ .Values.db.externalAccess.rwPort }}
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.db.clusterName }}-external-ro
+  namespace: {{ .Values.namespace.name }}
+spec:
+  type: NodePort
+  selector:
+    cnpg.io/cluster: {{ .Values.db.clusterName }}
+    cnpg.io/instanceRole: replica
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: 5432
+      nodePort: {{ .Values.db.externalAccess.roPort }}
+{{- end }}

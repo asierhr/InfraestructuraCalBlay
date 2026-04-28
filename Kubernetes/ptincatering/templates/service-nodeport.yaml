@@ -1,0 +1,17 @@
+{{- if .Values.back.nodePort.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.back.name }}-nodeport
+  namespace: {{ .Values.namespace.name }}
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Values.back.name }}-app
+  ports:
+    - port: 8080
+      targetPort: 8080
+      {{- if .Values.back.nodePort.manualPort }}
+      nodePort: {{ .Values.back.nodePort.manualPort }}
+      {{- end }}
+{{- end }}
