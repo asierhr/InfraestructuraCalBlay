@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.front.name }}-config
+  namespace: {{ .Values.namespace.name }}
+data:
+  config.js: |
+    window.RUNTIME_CONFIG = {
+      "API_URL_EXTERNAL": "{{ .Values.front.url.external }}"
+      "API_URL_INTERNAL": "{{ .Values.front.url.internal }}"
+    }
