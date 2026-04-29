@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.back.name }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.back.name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.back.name }}-app
+    spec:
+      containers:
+      - name: {{ .Values.back.name }}-app
+        image: "{{ .Values.back.image.repository }}:{{ .Values.back.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: {{ .Values.namespace.env | quote }}
+        - name: SPRING_DATASOURCE_RW_URL
+          value: "jdbc:postgresql://{{ .Values.db.clusterName }}-rw:5432/{{ .Values.db.databaseName }}"
+        - name: SPRING_DATASOURCE_RO_URL
+          value: "jdbc:postgresql://{{ .Values.db.clusterName }}-ro:5432/{{ .Values.db.databaseName }}"
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.secretName }}
+              key: username
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.secretName }}
+              key: password
+        resources:
+          requests:
+            memory: {{ .Values.back.resources.requests.memory | quote }}
+            cpu: {{ .Values.back.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.back.resources.limits.memory | quote }}
+            cpu: {{ .Values.back.resources.limits.cpu | quote }}

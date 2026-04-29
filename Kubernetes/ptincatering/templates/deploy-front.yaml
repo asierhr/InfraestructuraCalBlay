@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.front.name }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.front.name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.front.name }}-app
+    spec:
+      containers:
+      - name: {{ .Values.front.name }}-app
+        image: "{{ .Values.front.image.repository }}:{{ .Values.front.image.tag }}"
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: {{ .Values.front.resources.requests.memory | quote }}
+            cpu: {{ .Values.front.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.front.resources.limits.memory | quote }}
+            cpu: {{ .Values.front.resources.limits.cpu | quote }}

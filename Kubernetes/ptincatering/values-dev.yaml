@@ -1,0 +1,51 @@
+namespace:
+  name: testing
+  env: dev
+  team: ptincatering
+
+db:
+  clusterName: ptinbd-test
+  instances: 2
+  storageSize: "5Gi"
+  databaseName: test
+  resources:
+    requests:
+      memory: "300Mi" 
+      cpu: "200m"
+    limits:
+      memory: "500Mi"
+      cpu: "400m"
+  externalAccess:
+    enabled: true
+    rwPort: 30432
+    roPort: 30433
+
+back:
+  image:
+    repository: asierhr/catering-back-test
+    tag: v2.2
+  resources:
+    requests:
+      memory: "300Mi"
+      cpu: "250m"
+    limits:
+      memory: "600Mi"
+      cpu: "500m"
+  nodePort:
+    enabled: true
+    manualPort: 30080
+
+front:
+  image:
+    repository: asierhr/catering-frontend-dev
+    tag: v4
+  resources:
+    requests:
+      memory: "250Mi"
+      cpu: "250m"
+    limits:
+      memory: "500Mi"
+      cpu: "500m"
+
+ingress:
+  host: ptincatering-test.me
