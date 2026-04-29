@@ -23,7 +23,7 @@ db:
 back:
   image:
     repository: asierhr/catering-back-test
-    tag: v2.2
+    tag: v2.3
   resources:
     requests:
       memory: "300Mi"
@@ -38,7 +38,10 @@ back:
 front:
   image:
     repository: asierhr/catering-frontend-dev
-    tag: v4
+    tag: v4.3
+  url:
+    external: "http://ptincatering-me"
+    internal: "http://ptin-back:8080"
   resources:
     requests:
       memory: "250Mi"

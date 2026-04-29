@@ -38,6 +38,9 @@ front:
   image:
     repository: asierhr/catering-frontend
     tag: v4
+  url:
+    external: "https://ptincatering.me"
+    internal: "http://ptin-back:8080"
   resources:
     requests:
       memory: "500Mi"
