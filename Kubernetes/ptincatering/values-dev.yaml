@@ -21,6 +21,13 @@ db:
     roPort: 30433
 
 back:
+  canary:
+    setWeight:
+      Weight1: 20
+      Weight2: 50
+    pause:
+      duration1: 5m
+      duration2: 2m
   image:
     repository: asierhr/catering-back-test
     tag: v2.3
@@ -36,12 +43,19 @@ back:
     manualPort: 30080
 
 front:
+  canary:
+    setWeight:
+      Weight1: 20
+      Weight2: 50
+    pause:
+      duration1: 5m
+      duration2: 2m
   image:
     repository: asierhr/catering-frontend-dev
     tag: v4.3
   url:
     external: "http://ptincatering-me"
-    internal: "http://ptin-back:8080"
+    internal: "http://ptin-back-stable:8080"
   resources:
     requests:
       memory: "250Mi"

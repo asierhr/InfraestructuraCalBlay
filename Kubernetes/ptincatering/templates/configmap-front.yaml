@@ -6,6 +6,6 @@ metadata:
 data:
   config.js: |
     window.RUNTIME_CONFIG = {
-      "API_URL_EXTERNAL": "{{ .Values.front.url.external }}"
+      "API_URL_EXTERNAL": "{{ .Values.front.url.external }}",
       "API_URL_INTERNAL": "{{ .Values.front.url.internal }}"
     }

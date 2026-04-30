@@ -1,9 +1,21 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
 metadata:
   name: {{ .Values.front.name }}
   namespace: {{ .Values.namespace.name }}
 spec:
+  strategy:
+    canary:
+      stableService: {{ .Values.front.name }}-stable
+      canaryService: {{ .Values.front.name }}-canary
+      trafficRouting:
+        nginx:
+          stableIngress: {{ .Values.ingress.name }}-ingress
+      steps:
+      - setWeight: {{ .Values.front.canary.setWeight.Weight1 }}
+      - pause: {duration: {{ .Values.front.canary.pause.duration1 }}}
+      - setWeight: {{ .Values.front.canary.setWeight.Weight2 }}
+      - pause: {duration: {{ .Values.front.canary.pause.duration2 }}}
   selector:
     matchLabels:
       app: {{ .Values.front.name }}-app
@@ -15,6 +27,17 @@ spec:
       containers:
       - name: {{ .Values.front.name }}-app
         image: "{{ .Values.front.image.repository }}:{{ .Values.front.image.tag }}"
+        volumeMounts:
+        - name: config-volume
+          mountPath: /usr/share/nginx/html/config.js
+          subPath: config.js
+        - name: config-volume
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: nginx.conf
+        volumes:
+        - name: config-volume
+          configMap:
+            name: {{ .Values.front.name }}-config
         ports:
         - containerPort: 80
         resources:

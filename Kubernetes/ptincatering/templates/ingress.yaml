@@ -1,8 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ .Values.ingress.name }}
+  name: {{ .Values.ingress.name }}-ingress
   namespace: {{ .Values.namespace.name }}
+  annotations:
+    kubernetes.io/ingress.class: nginx
 spec:
   rules:
   - host: {{ .Values.ingress.host | quote }}
@@ -12,13 +14,13 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.back.name }}
+            name: {{ .Values.back.name }}-stable
             port:
               number: 8080
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: {{ .Values.front.name }}
+            name: {{ .Values.front.name }}-stable
             port:
               number: 80
