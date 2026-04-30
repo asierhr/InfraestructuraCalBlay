@@ -31,7 +31,7 @@ back:
       duration2: 2m
   image:
     repository: asierhr/catering-back-test
-    tag: v2.3
+    tag: v2.4
   resources:
     requests:
       memory: "300Mi"
