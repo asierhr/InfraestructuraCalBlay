@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Values.front.name }}
+  name: {{ .Values.front.name }}-stable
   namespace: {{ .Values.namespace.name }}
 spec:
   type: ClusterIP

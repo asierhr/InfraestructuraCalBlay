@@ -21,6 +21,7 @@ db:
     roPort: 30433
 
 back:
+  replicas: 1
   canary:
     setWeight:
       Weight1: 20
@@ -43,6 +44,7 @@ back:
     manualPort: 30080
 
 front:
+  replicas: 1
   canary:
     setWeight:
       Weight1: 20

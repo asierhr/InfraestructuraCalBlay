@@ -9,3 +9,21 @@ data:
       "API_URL_EXTERNAL": "{{ .Values.front.url.external }}",
       "API_URL_INTERNAL": "{{ .Values.front.url.internal }}"
     }
+
+  nginx.conf: |
+    server {
+        listen 80;
+        server_name localhost;
+
+        location / {
+             root /usr/share/nginx/html;
+             index index.html;
+             try_files $uri $uri/ /index.html;
+        }
+
+        location /api/ {
+            proxy_pass {{ .Values.front.url.internal }};
+            proxy_set_header Host $host;
+            proxy_set_header X-REAL-IP $remote_addr;
+        }
+    }

@@ -6,8 +6,8 @@ metadata:
   namespace: {{ .Values.namespace.name }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
+    apiVersion: argoproj.io/v1alpha1
+    kind: Rollout
     name: {{ .Values.back.name }}
   minReplicas: {{ .Values.back.hpa.minReplicas }}
   maxReplicas: {{ .Values.back.hpa.maxReplicas }}

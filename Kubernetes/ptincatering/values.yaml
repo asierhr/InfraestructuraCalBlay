@@ -23,4 +23,9 @@ front:
 
 ingress:
   name: app-ingress
-
+  class: nginx
+  nginx:
+    affinity: "cookie"
+    session_cookie_name: "route"
+    session_cookie_expires: "172800"
+    session_cookie_max_age: "172800"

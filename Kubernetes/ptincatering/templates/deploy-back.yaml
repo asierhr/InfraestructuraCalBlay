@@ -4,13 +4,13 @@ metadata:
   name: {{ .Values.back.name }}
   namespace: {{ .Values.namespace.name }}
 spec:
+  {{- if not .Values.back.hpa.enabled }}
+  replicas: {{ .Values.back.replicas }}
+  {{- end }}
   strategy:
     canary:
       stableService: {{ .Values.back.name }}-stable
       canaryService: {{ .Values.back.name }}-canary
-      trafficRouting:
-        nginx:
-          stableIngress: {{ .Values.ingress.name }}-ingress
       steps:
       - setWeight: {{ .Values.back.canary.setWeight.Weight1 }}
       - pause: {duration: {{ .Values.back.canary.pause.duration1 }}}
