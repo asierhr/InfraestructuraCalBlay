@@ -22,6 +22,7 @@ Instalar el argo rollouts:
   kubectl argo rollouts version  
 
 Deshabilitar Traefik:
+
 		Editar el servicio: 
 		
 		Abre el archivo /etc/systemd/system/k3s.service y asegúrate de que la línea ExecStart termine con el flag de deshabilitar: ExecStart=/usr/local/bin/k3s server --disable traefik	
