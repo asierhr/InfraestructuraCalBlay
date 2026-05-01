@@ -54,3 +54,15 @@ spec:
           limits:
             memory: {{ .Values.back.resources.limits.memory | quote }}
             cpu: {{ .Values.back.resources.limits.cpu | quote }}
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5

@@ -7,7 +7,9 @@ data:
   config.js: |
     window.RUNTIME_CONFIG = {
       "API_URL_EXTERNAL": "{{ .Values.front.url.external }}",
-      "API_URL_INTERNAL": "{{ .Values.front.url.internal }}"
+      "API_URL_INTERNAL": "{{ .Values.front.url.internal }}",
+      "OTEL_URL": "/api/otlp/v1/traces",
+      "ENVIRONMENT": "{{ .Values.namespace.name }}"
     }
 
   nginx.conf: |
@@ -23,6 +25,13 @@ data:
 
         location /api/ {
             proxy_pass {{ .Values.front.url.internal }};
+            proxy_set_header Host $host;
+            proxy_set_header X-REAL-IP $remote_addr;
+        }
+
+        location /api/otlp/ {
+            proxy_pass http://my-otel-collector-opentelemetry-collector.default.svc.cluster.local:4318/;
+            proxy_http_version 1.1;
             proxy_set_header Host $host;
             proxy_set_header X-REAL-IP $remote_addr;
         }

@@ -54,7 +54,7 @@ front:
       duration2: 2m
   image:
     repository: asierhr/catering-frontend-dev
-    tag: v4.3
+    tag: v4.5
   url:
     external: "http://ptincatering-me"
     internal: "http://ptin-back-stable:8080"

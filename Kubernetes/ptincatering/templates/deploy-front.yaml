@@ -46,6 +46,18 @@ spec:
           limits:
             memory: {{ .Values.front.resources.limits.memory | quote }}
             cpu: {{ .Values.front.resources.limits.cpu | quote }}
+        livenessProbe:
+          httpGet:
+            path: /index.html
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /index.html
+            port: 80
+          initialDelaySeconds: 2
+          periodSeconds: 5
       volumes:
       - name: config-volume
         configMap:
