@@ -40,8 +40,10 @@ Verificar que el puente esta activo:
 kubectl get pods -n kube-system | grep svclb-nginx																										
 
 Instalar Prometheus:
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts		
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
 helm repo update	
+
 helm install monitor prometheus-community/kube-prometheus-stack \
   -n monitoring \
   --create-namespace \
