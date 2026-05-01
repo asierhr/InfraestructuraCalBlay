@@ -23,29 +23,29 @@ Instalar el argo rollouts:
 
 Deshabilitar Traefik:
 
-		Editar el servicio: 
+Editar el servicio: 
 		
-		Abre el archivo /etc/systemd/system/k3s.service y asegúrate de que la línea ExecStart termine con el flag de deshabilitar: ExecStart=/usr/local/bin/k3s server --disable traefik	
+Abre el archivo /etc/systemd/system/k3s.service y asegúrate de que la línea ExecStart termine con el flag de deshabilitar: ExecStart=/usr/local/bin/k3s server --disable traefik	
 		
-	Aplicar cambios en el nodo:		
+Aplicar cambios en el nodo:		
 	
-		sudo systemctl daemon-reload	
+sudo systemctl daemon-reload	
 		
-		sudo systemctl restart k3s		
+sudo systemctl restart k3s		
 		
-	Borrar restos en el clúster:		
+Borrar restos en el clúster:		
 	
-		kubectl delete svc traefik -n kube-system	
+kubectl delete svc traefik -n kube-system	
 		
-		kubectl delete ingressroute -A --all		
+kubectl delete ingressroute -A --all		
 		
-	Cambiar el tipo de servicio a LoadBalancer:		
+Cambiar el tipo de servicio a LoadBalancer:		
 	
-		kubectl patch svc nginx-ingress-ingress-nginx-controller -n kube-system -p '{"spec": {"type": "LoadBalancer"}}'		
+kubectl patch svc nginx-ingress-ingress-nginx-controller -n kube-system -p '{"spec": {"type": "LoadBalancer"}}'		
 		
-	Verificar que el puente esta activo:				
+Verificar que el puente esta activo:				
 	
-		kubectl get pods -n kube-system | grep svclb-nginx																										
+kubectl get pods -n kube-system | grep svclb-nginx																										
 
 Instalar Prometheus:
 
