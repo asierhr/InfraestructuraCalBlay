@@ -6,6 +6,9 @@ metadata:
   labels:
     release: prometheus-monitor
 spec:
+  namespaceSelector:
+    matchNames:
+      - default
   selector:
     matchLabels:
       app.kubernetes.io/name: opentelemetry-collector
