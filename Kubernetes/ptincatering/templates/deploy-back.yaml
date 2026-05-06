@@ -1,0 +1,68 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ .Values.back.name }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  {{- if not .Values.back.hpa.enabled }}
+  replicas: {{ .Values.back.replicas }}
+  {{- end }}
+  strategy:
+    canary:
+      stableService: {{ .Values.back.name }}-stable
+      canaryService: {{ .Values.back.name }}-canary
+      steps:
+      - setWeight: {{ .Values.back.canary.setWeight.Weight1 }}
+      - pause: {duration: {{ .Values.back.canary.pause.duration1 }}}
+      - setWeight: {{ .Values.back.canary.setWeight.Weight2 }}
+      - pause: {duration: {{ .Values.back.canary.pause.duration2 }}}
+  selector:
+    matchLabels:
+      app: {{ .Values.back.name }}-app
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.back.name }}-app
+    spec:
+      containers:
+      - name: {{ .Values.back.name }}-app
+        image: "{{ .Values.back.image.repository }}:{{ .Values.back.image.tag }}"
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: {{ .Values.namespace.env | quote }}
+        - name: SPRING_DATASOURCE_RW_URL
+          value: "jdbc:postgresql://{{ .Values.db.clusterName }}-rw:5432/{{ .Values.db.databaseName }}"
+        - name: SPRING_DATASOURCE_RO_URL
+          value: "jdbc:postgresql://{{ .Values.db.clusterName }}-ro:5432/{{ .Values.db.databaseName }}"
+        - name: SPRING_DATASOURCE_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.secretName }}
+              key: username
+        - name: SPRING_DATASOURCE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Values.db.secretName }}
+              key: password
+        resources:
+          requests:
+            memory: {{ .Values.back.resources.requests.memory | quote }}
+            cpu: {{ .Values.back.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.back.resources.limits.memory | quote }}
+            cpu: {{ .Values.back.resources.limits.cpu | quote }}
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 5

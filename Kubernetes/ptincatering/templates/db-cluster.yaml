@@ -1,0 +1,31 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: {{ .Values.db.clusterName }}
+  namespace: {{ .Values.namespace.name }}
+spec:
+  instances: {{ .Values.db.instances }}
+  storage:
+    size: {{ .Values.db.storageSize }}
+  postgresql:
+    parameters:
+      max_connections: {{ .Values.db.maxConnections | quote }}
+      shared_buffers: "256MB"
+  bootstrap:
+    initdb:
+      database: {{ .Values.db.databaseName }}
+      owner: {{ .Values.db.user }}
+      secret:
+        name: {{ .Values.db.secretName }}
+
+  monitoring:
+    enablePodMonitor: {{ .Values.db.monitoring.enabled }}
+
+
+  resources:
+    requests:
+      memory: {{ .Values.db.resources.requests.memory }}
+      cpu: {{ .Values.db.resources.requests.cpu }}
+    limits:
+      memory: {{ .Values.db.resources.limits.memory }}
+      cpu: {{ .Values.db.resources.limits.cpu }}

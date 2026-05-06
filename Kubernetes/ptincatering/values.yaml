@@ -1,0 +1,31 @@
+db:
+  secretName: postgresql-secret
+  username: ptincatering
+  password: ptincatering
+  maxConnections: 200
+  user: ptincatering
+  monitoring:
+    enabled: true
+  externalAccess:
+    enabled: false
+
+back:
+  name: ptin-back
+  hpa:
+    enabled: false
+  nodePort:
+    enabled: false
+
+front:
+  name: ptin-front
+  hpa:
+    enabled: false
+
+ingress:
+  name: app-ingress
+  class: nginx
+  nginx:
+    affinity: "cookie"
+    session_cookie_name: "route"
+    session_cookie_expires: "172800"
+    session_cookie_max_age: "172800"

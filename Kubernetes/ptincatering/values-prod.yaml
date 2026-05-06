@@ -1,0 +1,73 @@
+namespace:
+  name: prod
+  env: prod
+  team: ptincatering
+
+db:
+  clusterName: ptinbd
+  instances: 3
+  storageSize: "10Gi"
+  databaseName: prod
+  resources:
+    requests:
+      memory: "256Mi" 
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+back:
+  canary:
+    setWeigth:
+      Weigth1: 20
+      Weigth2: 50
+    pause:
+      duration1: 5m
+      duration2: 2m
+  image:
+    repository: asierhr/catering-back
+    tag: v2.10
+  resources:
+    requests:
+      memory: "600Mi"
+      cpu: "400m"
+    limits:
+      memory: "1Gi"
+      cpu: "700m"
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    cpuTarget: 50
+    memoryTarget: 500Mi
+
+front:
+  canary:
+    setWeight:
+      Weight1: 20
+      Weight2: 50
+    pause:
+      duration1: 5m
+      duration2: 2m
+  image:
+    repository: asierhr/catering-frontend
+    tag: v4
+  url:
+    external: "https://ptincatering.me"
+    internal: "http://ptin-back-stable:8080"
+  resources:
+    requests:
+      memory: "500Mi"
+      cpu: "400m"
+    limits:
+      memory: "1Gi"
+      cpu: "700m"
+  hpa:
+    enabled: true
+    minReplicas: 2
+    maxReplicas: 4
+    cpuTarget: 50
+    memoryTarget: 500Mi
+
+ingress:
+  host: ptincatering.me
