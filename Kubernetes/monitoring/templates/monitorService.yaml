@@ -1,14 +1,15 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ .Values.back.name }}-monitor
-  namespace: {{ .Values.namespace.name }}
+  name: ptin-back-monitor
   labels:
     release: monitor
 spec:
+  namespaceSelector:
+    any: true
   selector:
     matchLabels:
-      app: {{ .Values.back.name }}-app
+      app: ptin-back-app
   endpoints:
   - port: http 
     path: /actuator/prometheus

@@ -4,7 +4,7 @@ metadata:
   name: otel-collector-monitor
   namespace: monitoring
   labels:
-    release: prometheus-monitor
+    release: monitor
 spec:
   namespaceSelector:
     matchNames:
@@ -14,4 +14,5 @@ spec:
       app.kubernetes.io/name: opentelemetry-collector
   endpoints:
   - port: metrics
+    path: /metrics
     interval: 30s

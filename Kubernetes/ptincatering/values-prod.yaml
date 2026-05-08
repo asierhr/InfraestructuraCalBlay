@@ -18,9 +18,9 @@ db:
 
 back:
   canary:
-    setWeigth:
-      Weigth1: 20
-      Weigth2: 50
+    setWeight:
+      Weight1: 20
+      Weight2: 50
     pause:
       duration1: 5m
       duration2: 2m
