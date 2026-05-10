@@ -50,11 +50,11 @@ front:
       Weight1: 20
       Weight2: 50
     pause:
-      duration1: 5m
-      duration2: 2m
+      duration1: 1m
+      duration2: 1m
   image:
     repository: asierhr/catering-frontend-dev
-    tag: v4.7
+    tag: v4.19
   url:
     external: "http://ptincatering-me"
     internal: "http://ptin-back-stable:8080"

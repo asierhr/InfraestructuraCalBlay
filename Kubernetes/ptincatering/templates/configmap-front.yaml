@@ -8,7 +8,7 @@ data:
     window.RUNTIME_CONFIG = {
       "API_URL_EXTERNAL": "{{ .Values.front.url.external }}",
       "API_URL_INTERNAL": "{{ .Values.front.url.internal }}",
-      "OTEL_URL": "/api/otlp/v1/traces",
+      "OTEL_URL": "/api/otlp",
       "ENVIRONMENT": "{{ .Values.namespace.name }}"
     }
 

@@ -7,6 +7,8 @@ spec:
   {{- if not .Values.front.hpa.enabled }}
   replicas: {{ .Values.front.replicas }}
   {{- end }}
+  progressDeadlineSeconds: 300
+  progressDeadlineAbort: true
   strategy:
     canary:
       stableService: {{ .Values.front.name }}-stable
