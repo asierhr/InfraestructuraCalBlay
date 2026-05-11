@@ -30,7 +30,7 @@ back:
       duration1: 5m
       duration2: 2m
   image:
-    repository: asierhr/catering-back-test
+    repository: ptincatering/catering-back-test
     tag: v2.5
   resources:
     requests:
@@ -53,7 +53,7 @@ front:
       duration1: 1m
       duration2: 1m
   image:
-    repository: asierhr/catering-frontend-dev
+    repository: ptincatering/catering-frontend-dev
     tag: v4.19
   url:
     external: "http://ptincatering-me"
