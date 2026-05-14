@@ -1,0 +1,17 @@
+{{- if .Values.front.nodePort.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.front.name }}-nodeport
+  namespace: {{ .Values.namespace.name }}
+spec:
+  type: NodePort
+  selector:
+    app: {{ .Values.front.name }}-app
+  ports:
+    - port: 80
+      targetPort: 80
+      {{- if .Values.front.nodePort.manualPort }}
+      nodePort: {{ .Values.front.nodePort.manualPort }}
+      {{- end }}
+{{- end }}

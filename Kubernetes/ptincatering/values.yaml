@@ -20,6 +20,8 @@ front:
   name: ptin-front
   hpa:
     enabled: false
+  nodePort:
+    enabled: false
 
 ingress:
   name: app-ingress

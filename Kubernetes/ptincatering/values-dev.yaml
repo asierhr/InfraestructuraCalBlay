@@ -27,11 +27,11 @@ back:
       Weight1: 20
       Weight2: 50
     pause:
-      duration1: 5m
-      duration2: 2m
+      duration1: 1m
+      duration2: 1m
   image:
     repository: ptincatering/catering-back-test
-    tag: v2.5
+    tag: v2.6
   resources:
     requests:
       memory: "300Mi"
@@ -42,6 +42,9 @@ back:
   nodePort:
     enabled: true
     manualPort: 30080
+  volumes:
+    pvc:
+      name: pvc-testing
 
 front:
   replicas: 1
@@ -54,7 +57,7 @@ front:
       duration2: 1m
   image:
     repository: ptincatering/catering-frontend-dev
-    tag: v4.19
+    tag: v4.21
   url:
     external: "http://ptincatering-me"
     internal: "http://ptin-back-stable:8080"
@@ -65,6 +68,38 @@ front:
     limits:
       memory: "500Mi"
       cpu: "500m"
+  nodePort:
+    enabled: true
+    manualPort: 30081
 
 ingress:
   host: ptincatering-test.me
+
+rbac:
+  rules:
+    - apiGroups: ["argoproj.io"]
+      resources: ["rollouts"]
+      verbs: ["get", "list", "watch", "create", "update"]
+
+    - apiGroups: ["apps"]
+      resources: ["deployments", "replicasets"]
+      verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+    - apiGroups: [""]
+      resources: ["services"]
+      verbs: ["get", "list", "watch", "create", "update"]
+
+    - apiGroups: [""]
+      resources: ["configmaps"]
+      verbs: ["*"]
+
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get", "list", "watch"]
+
+    - apiGroups: [""]
+      resources: ["secrets"]
+      verbs: ["*"]
+
+
+

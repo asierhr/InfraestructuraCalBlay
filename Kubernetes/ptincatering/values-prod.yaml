@@ -26,7 +26,7 @@ back:
       duration2: 2m
   image:
     repository: ptincatering/catering-back
-    tag: v2.10
+    tag: v2.11
   resources:
     requests:
       memory: "600Mi"
@@ -40,7 +40,9 @@ back:
     maxReplicas: 4
     cpuTarget: 50
     memoryTarget: 500Mi
-
+  volumes:
+    pvc:
+      name: pvc-production
 front:
   canary:
     setWeight:
@@ -51,7 +53,7 @@ front:
       duration2: 2m
   image:
     repository: ptincatering/catering-frontend
-    tag: v4
+    tag: v4.1
   url:
     external: "https://ptincatering.me"
     internal: "http://ptin-back-stable:8080"
@@ -71,3 +73,29 @@ front:
 
 ingress:
   host: ptincatering.me
+
+rbac:
+  rules:
+    - apiGroups: ["argoproj.io"]
+      resources: ["rollouts"]
+      verbs: ["get", "list", "watch", "update"]
+
+    - apiGroups: ["apps"]
+      resources: ["deployments", "replicasets"]
+      verbs: ["get", "list", "watch"]
+
+    - apiGroups: [""]
+      resources: ["services"]
+      verbs: ["get", "list", "watch", "update"]
+
+    - apiGroups: [""]
+      resources: ["configmaps"]
+      verbs: ["get", "list"]
+
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get", "list", "watch"]
+
+    - apiGroups: [""]
+      resources: ["secrets"]
+      verbs: ["get", "list", "watch"]

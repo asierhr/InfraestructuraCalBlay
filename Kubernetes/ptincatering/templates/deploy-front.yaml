@@ -39,6 +39,8 @@ spec:
         - name: config-volume
           mountPath: /etc/nginx/conf.d/default.conf
           subPath: nginx.conf
+        - name: nfs-vol
+          mountPath: /mnt/storage/imagenes
         ports:
         - containerPort: 80
         resources:
@@ -64,3 +66,7 @@ spec:
       - name: config-volume
         configMap:
           name: {{ .Values.front.name }}-config
+      - name: nfs-vol
+        persistentVolumeClaim:
+          claimName: {{ .Values.back.volumes.pvc.name }}
+

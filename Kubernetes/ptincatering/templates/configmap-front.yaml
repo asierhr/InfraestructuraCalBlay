@@ -35,4 +35,8 @@ data:
             proxy_set_header Host $host;
             proxy_set_header X-REAL-IP $remote_addr;
         }
+
+        location /api/images {
+            alias /mnt/storage/imagenes/;
+        }
     }

@@ -32,6 +32,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8080
+        volumeMounts:
+            - name: nfs-vol
+              mountPath: /mnt/storage/imagenes
         env:
         - name: SPRING_PROFILES_ACTIVE
           value: {{ .Values.namespace.env | quote }}
@@ -68,3 +71,7 @@ spec:
             port: 8080
           initialDelaySeconds: 30
           periodSeconds: 5
+      volumes:
+        - name: nfs-vol
+          persistentVolumeClaim:
+            claimName: {{ .Values.back.volumes.pvc.name }}
