@@ -98,7 +98,7 @@ rbac:
       verbs: ["get", "list", "watch"]
 
     - apiGroups: [""]
-      resources: ["secrets"]
+      resources: ["secrets", "serviceaccounts"]
       verbs: ["*"]
 
 
