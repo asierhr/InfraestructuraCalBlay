@@ -104,6 +104,10 @@ rbac:
       resources: ["roles", "rolebindings"]
       verbs: ["*"]
 
+    - apiGroups: ["autoscaling"]
+      resources: ["horizontalpodautoscalers"]
+      verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
     - apiGroups: ["networking.k8s.io"]
       resources: ["ingresses"]
       verbs: ["*"]
