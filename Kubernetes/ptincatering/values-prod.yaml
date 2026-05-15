@@ -78,24 +78,36 @@ rbac:
   rules:
     - apiGroups: ["argoproj.io"]
       resources: ["rollouts"]
-      verbs: ["get", "list", "watch", "update"]
+      verbs: ["*"]
 
     - apiGroups: ["apps"]
       resources: ["deployments", "replicasets"]
-      verbs: ["get", "list", "watch"]
+      verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
 
     - apiGroups: [""]
       resources: ["services"]
-      verbs: ["get", "list", "watch", "update"]
+      verbs: ["get", "list", "watch", "create", "update"]
 
     - apiGroups: [""]
       resources: ["configmaps"]
-      verbs: ["get", "list"]
+      verbs: ["*"]
 
     - apiGroups: [""]
       resources: ["pods"]
       verbs: ["get", "list", "watch"]
 
     - apiGroups: [""]
-      resources: ["secrets"]
-      verbs: ["get", "list", "watch"]
+      resources: ["secrets", "serviceaccounts"]
+      verbs: ["*"]
+
+    - apiGroups: ["rbac.authorization.k8s.io"]
+      resources: ["roles", "rolebindings"]
+      verbs: ["*"]
+
+    - apiGroups: ["networking.k8s.io"]
+      resources: ["ingresses"]
+      verbs: ["*"]
+
+    - apiGroups: ["postgresql.cnpg.io"]
+      resources: ["clusters"]
+      verbs: ["*"]
