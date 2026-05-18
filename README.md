@@ -71,6 +71,3 @@ Utilizamos **Prometheus** para recopilar métricas y **Grafana** para visualizar
 ---
 ## 📝 Próximos pasos
 - Completar los gráficos de monitorización en Grafana. 
-
-Por si sale algun error a la hora de ejecutar alguno de los dos comandos:
-Exportamos esta variable (export KUBECONFIG=/etc/rancher/k3s/k3s.yaml) al bashrc
