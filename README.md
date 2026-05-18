@@ -1,63 +1,76 @@
-Instalar el helm:                                                                                                                                                                                                     
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3                                                                                                                          
-chmod 700 get_helm.sh                                                                                                                                                                                                  
-./get_helm.sh
-helm version
+# 🏗️ InfraestructuraCalBlay
 
-Instalar el nginx:                                                                                                                                                                                                     
-helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx                                                                                                                                                 
-helm repo update                                                                                                                                                                                                       
-helm install nginx-ingress ingress-nginx/ingress-nginx \
-  --namespace kube-system \
-  --set controller.publishService.enabled=true                                                                                                                                                                           
+Infraestructura desarrollada para un proyecto con la empresa **Cal Blay**, diseñada para ser escalable y monitorizable en tiempo real. El despliegue está automatizado usando **Docker**, **Kubernetes** y **GitHub Actions**, y la monitorización se realiza con **Grafana** y **Prometheus**.
 
-Instalar el argo rollouts:                                                                                                                                                                                             
-  Controlador:                                                                                                                                                                                                         
-  kubectl create namespace argo-rollouts                                                                                                                                                                               
-  kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml                                                                                                      
-  CLI:
-  curl -LO https://github.com/argoproj/argo-rollouts/releases/latest/download/kubectl-argo-rollouts-linux-amd64                                                                                                        
-  chmod +x ./kubectl-argo-rollouts-linux-amd64                                                                                                                                                                         
-  sudo mv ./kubectl-argo-rollouts-linux-amd64 /usr/local/bin/kubectl-argo-rollouts                                                                                                                                     
-  kubectl argo rollouts version  
+---
+## 🏢 Arquitectura general
 
-Deshabilitar Traefik:
-Editar el servicio: 
-Abre el archivo /etc/systemd/system/k3s.service y asegúrate de que la línea ExecStart termine con el flag de deshabilitar: ExecStart=/usr/local/bin/k3s server --disable traefik	
+El proyecto se monta sobre un **cluster de Kubernetes** configurado sobre **Proxmox**.  
+- **Cluster Kubernetes:** 3 máquinas, una de ellas configurada como **master** y las otras 2 como **workers**.  
+- **Servidor de archivos:** Un servidor adicional se utiliza como servidor **NFS** para almacenamiento compartido.  
 
-Aplicar cambios en el nodo:		
-sudo systemctl daemon-reload		
-sudo systemctl restart k3s		
+---
+## ☸️ Kubernetes
 
-Borrar restos en el clúster:		
-kubectl delete svc traefik -n kube-system		
-kubectl delete ingressroute -A --all			
+El cluster está organizado como un **cluster multientorno**, con dos entornos principales:
 
-Cambiar el tipo de servicio a LoadBalancer:		
-kubectl patch svc nginx-ingress-ingress-nginx-controller -n kube-system -p '{"spec": {"type": "LoadBalancer"}}'		
+1. **Testing/QA:**  
+   - Entorno de desarrollo y pruebas.  
+   - Permite que los desarrolladores puedan probar sus funcionalidades localmente sin afectar otros servicios.
+   - Permite validar cambios antes de desplegar en producción. 
+
+2. **Producción:**  
+   - Entorno estable donde se ejecutan las aplicaciones finales.  
+   - Garantiza alta disponibilidad y rendimiento.  
+
+### Caracteristicas interesantes
+
+1. **Cluster de PostgreSQL dentro de cada entorno**  
+	- Cada entorno cuenta con su propio cluster de PostgreSQL para garantizar **alta disponibilidad y persistencia** entre máquinas.  
+	- La configuración incluye **pods de lectura/escritura y solo lectura**, optimizando el rendimiento de la aplicación.  
+  
+2. **Nginx como reverse proxy en el frontend**  
+	- Maneja las solicitudes entrantes y balancea la carga entre los servicios del cluster.  
+	- Ayuda a prevenir problemas de **CORS** y mejora la seguridad del frontend.
+  
+3. **Horizontal Pod Autoscaler (HPA)**  
+	- Escala automáticamente los pods según la carga.  
+	- Garantiza **rendimiento y disponibilidad** ante picos de tráfico.
+
+4. **Argo Rollouts**
+	- Permite hacer **despliegues escalonados** para verificar el correcto funcionamiento del sistema.  
+	- Se han implementado **Canary Deployments** para minimizar riesgos.  
+	- En caso de fallo, el sistema vuelve automáticamente a una **versión anterior**.
 	
-Verificar que el puente esta activo:				
-kubectl get pods -n kube-system | grep svclb-nginx																										
+5. **NFS (Network File System)**  
+	- Permite interactuar con el servidor de archivos para almacenar y recuperar imágenes utilizadas por el frontend.  
+	- Facilita el **almacenamiento compartido** entre pods y garantiza que todos los entornos tengan acceso a los mismos recursos.
 
-Instalar Prometheus:
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+---
+## 🛠️ Monitorización: ![Prometheus|38](https://skillicons.dev/icons?i=prometheus) Prometheus • ![Grafana|40](https://skillicons.dev/icons?i=grafana) Grafana
 
-helm repo update	
+Utilizamos **Prometheus** para recopilar métricas y **Grafana** para visualizarlas de manera clara y en tiempo real.
+### 1. Estadísticas de frontend
+- Recogemos métricas usando **OpenTelemetry**.  
+- Se configura un **collector** que recibe estas métricas y envía:
+  - **Métricas a Prometheus**  
+  - **Trazas a Tempo**
+### 2. Estadísticas de backend
+- Se recopilan mediante **Micrometer**, integrándose con nuestras aplicaciones para medir rendimiento y uso de recursos.
+### 3. Estadísticas de base de datos
+- El **operador de la base de datos** habilita monitorización automática sin necesidad de configuración adicional.
 
-helm install monitor prometheus-community/kube-prometheus-stack \
-  -n monitoring \
-  --create-namespace \
-  --set grafana.sidecar.dashboards.enabled=true \
-  --set prometheus.prometheusSpec.podMonitorSelectorNilUsesHelmValues=false		
+------
+## 🛠️ Tecnologías utilizadas
+- **Orquestación:** Docker, Kubernetes  
+- **CI/CD:** GitHub Actions  
+- **Monitorización:** Grafana, Prometheus  
+- **Almacenamiento compartido:** NFS  
+- **Sistema operativo base:** Proxmox
 
-Para despues poder conectarnos a Grafana, necesitaremos la contrasena, la sacamos asi:
-kubectl get secret --namespace monitoring monitor-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-
-Ejecutar entorno Kubernetes con Helm:
-helm upgrade --install ptin-test .   -f values.yaml   -f values-dev.yaml   --namespace testing   --create-namespace   --wait   --timeout 5m0s
-
-Eliminar entorno Kubernetes con Helm:
-helm uninstall ptin-test -n testing
+---
+## 📝 Próximos pasos
+- Completar los gráficos de monitorización en Grafana. 
 
 Por si sale algun error a la hora de ejecutar alguno de los dos comandos:
 Exportamos esta variable (export KUBECONFIG=/etc/rancher/k3s/k3s.yaml) al bashrc
