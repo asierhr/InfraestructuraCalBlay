@@ -70,4 +70,8 @@ Utilizamos **Prometheus** para recopilar métricas y **Grafana** para visualizar
 
 ---
 ## 📝 Próximos pasos
-- Completar los gráficos de monitorización en Grafana. 
+- Completar los gráficos de monitorización en Grafana.  
+
+## Repositorios adicionales
+- Frontend: [https://github.com/PTIN-Projecte/frontend-web](https://github.com/PTIN-Projecte/frontend-web)  
+- Backend: [https://github.com/PTIN-Projecte/backend](https://github.com/PTIN-Projecte/backend)
